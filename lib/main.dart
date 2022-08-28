@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart'; 
-import './question.dart';
-import './answer.dart';
+
+import './quiz.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,23 +17,10 @@ class MyApp extends StatefulWidget{
 }
 
 class _MyAppState extends State<MyApp>{
-  var _questionIndex = 0; 
 
-  void _answerQuestion(){
-
-    setState((){
-      _questionIndex = _questionIndex + 1; 
-    }); 
-
-    print(_questionIndex);
-
-  }
-  
-  @override
-  Widget build(BuildContext context){
-
-    const questions = [
-      {'questionText': '¿Cuál es tu comida favorita?', 'answers': [
+  final _questions = const [
+      {'questionText': '¿Cuál es tu comida favorita?', 
+      'answers': [
         'Chilaquiles', 'Tacos', 'Gorditas', 'Pizza'
       ]},
       {'questionText': '¿Cuál es tu mascota favorita?', 'answers': [
@@ -43,20 +31,38 @@ class _MyAppState extends State<MyApp>{
       ]},
     ]; 
 
+  var _questionIndex = 0; 
+
+  void _answerQuestion(){
+
+    setState((){
+      _questionIndex = _questionIndex + 1; 
+    }); 
+
+    print(_questionIndex);
+
+    if(_questionIndex < _questions.length){
+      print('Tenemos más preguntas'); 
+    } else {
+      print('No hay más datos'); 
+    }
+
+  }
+  
+  @override
+  Widget build(BuildContext context){
+
     return MaterialApp(home: Scaffold(
       appBar: AppBar(
         title: Text('Mi primera aplicación'),
       ),
-      body: Column(
-        children: [
-          Question(
-            questions[_questionIndex]['questionText'],
-          ),
-          ...(questions[_questionIndex]['answers'] as List<String>).map((answer) {
-            return Answer(_answerQuestion, answer); 
-          }).toList()
-        ]
-      ),
+      body: _questionIndex < _questions.length 
+        ?  Quiz(
+            answerQuestion: _answerQuestion,
+            questionIndex: _questionIndex,
+            questions: _questions,
+          ) 
+        : Result(),
     ),); 
   }
 }
