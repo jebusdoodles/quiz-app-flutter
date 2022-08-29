@@ -45,6 +45,13 @@ class _MyAppState extends State<MyApp>{
   var _questionIndex = 0;
   var _totalScore = 0;  
 
+  void _resetQuiz(){
+    setState(() {
+      _questionIndex = 0; 
+      _totalScore = 0; 
+    });
+  }
+
   void _answerQuestion(int score){
 
     _totalScore += score; 
@@ -58,7 +65,7 @@ class _MyAppState extends State<MyApp>{
     if(_questionIndex < _questions.length){
       print('Tenemos más preguntas'); 
     } else {
-      print('No hay más datos'); 
+      print('No hay más preguntas'); 
     }
 
   }
@@ -76,7 +83,8 @@ class _MyAppState extends State<MyApp>{
             questionIndex: _questionIndex,
             questions: _questions,
           ) 
-        : Result(),
-    ),); 
+        : Result(_totalScore, _resetQuiz)
+      ),
+    ); 
   }
 }
